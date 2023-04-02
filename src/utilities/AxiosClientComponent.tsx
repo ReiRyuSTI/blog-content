@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useErrorHandler } from 'react-error-boundary';
 
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
@@ -8,7 +8,7 @@ export const axiosClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
-  baseURL: 'https://localhost:4242',
+  baseURL: 'http://localhost:4242/dummy/',
 });
 
 type Props = {
@@ -17,8 +17,7 @@ type Props = {
 
 export const AxiosErrorHandlingComponent = (props: Props) => {
   const { children } = props;
-  const [serverError, setServerError] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const errorHandler = useErrorHandler();
 
   useEffect(() => {
     const responseInterceptor = axiosClient.interceptors.response.use(
@@ -26,11 +25,7 @@ export const AxiosErrorHandlingComponent = (props: Props) => {
         return response;
       },
       (error: AxiosError) => {
-        if (!error.response) {
-          setServerError(true);
-        } else {
-          if (error.response.status >= 500) setServerError(true);
-        }
+        errorHandler(error);
         return Promise.reject(error);
       }
     );
@@ -39,14 +34,7 @@ export const AxiosErrorHandlingComponent = (props: Props) => {
     return () => {
       axiosClient.interceptors.response.eject(responseInterceptor);
     };
-  }, []);
+  }, [errorHandler]);
 
-  if (serverError)
-    return (
-      <>
-        server error
-        <button onClick={() => navigate(0)}>retry</button>
-      </>
-    );
   return <>{children}</>;
 };
