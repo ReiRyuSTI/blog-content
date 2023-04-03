@@ -7,6 +7,7 @@ export const AxiosGetCompoennt = () => {
   const { data, isLoading, isValidating } = useSWR('test', dataFetch);
 
   if (isLoading || isValidating) return <LoadingComponent />;
+
   return <>{data}</>;
 };
 const dataFetch = async () => {
