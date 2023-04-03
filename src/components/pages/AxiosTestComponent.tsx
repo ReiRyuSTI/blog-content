@@ -1,11 +1,15 @@
+import useSWR from 'swr';
+
 import { axiosClient } from '@/utilities/AxiosClientComponent';
-const flag = { dataFetch: false };
+import { LoadingComponent } from '@/utilities/LoadingComponent';
 
 export const AxiosGetCompoennt = () => {
-  const data = dataFetch();
+  const { data, isLoading, isValidating } = useSWR('test', dataFetch);
+
+  if (isLoading || isValidating) return <LoadingComponent />;
   return <>{data}</>;
 };
-const dataFetch = () => {
-  if (!flag.dataFetch) throw axiosClient.get('400').then(() => (flag.dataFetch = true));
+const dataFetch = async () => {
+  await axiosClient.get('500');
   return 'data get';
 };
