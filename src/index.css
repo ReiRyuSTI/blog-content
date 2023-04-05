@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-button {
-  @apply inline-block w-52 rounded-lg border-4 border-slate-700 bg-gray-600 py-5 font-bold text-white;
+button,
+input {
+  @apply inline-block w-52 rounded-lg border-4 border-slate-700 py-5 font-bold text-black px-2;
 }
 .input-text {
   @apply inline-flex w-52 items-center justify-center rounded-md border-4 border-slate-600/50 p-2;

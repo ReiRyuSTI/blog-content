@@ -1,7 +1,12 @@
 import './App.css';
+import { HookFormPage } from './components/pages/HookFormPage';
 
 function App() {
-  return <></>;
+  return (
+    <>
+      <HookFormPage />
+    </>
+  );
 }
 
 export default App;
