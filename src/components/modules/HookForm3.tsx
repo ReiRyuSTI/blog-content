@@ -15,24 +15,30 @@ export const HookFormTest3 = () => {
     watch,
     handleSubmit,
     formState: { errors, isValid, isSubmitting },
-  } = useForm<QuestionType>({ mode: 'onChange' });
+  } = useForm<QuestionType>({
+    mode: 'onChange',
+    defaultValues: {
+      items: ['0', '1', '2'],
+    },
+  });
   const onSubmit: SubmitHandler<QuestionType> = (data: QuestionType) => {
     // API送信
     console.log(data);
   };
-  const watchAllFields = watch();
+  const watchAllFields = watch('items');
 
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <div>
+          <div className="flex flex-col">
             {myFavoriteFoods.map((item) => {
               return (
-                <label key={item.id}>
+                <label key={item.id} className="flex flex-row items-center gap-4">
                   <input
                     type="checkbox"
-                    value={item.name}
+                    value={item.id}
+                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 ring-offset-1 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
                     {...register('items', {
                       validate: {
                         atLeastOneRequired: (value) =>
