@@ -6,9 +6,9 @@ export const HookFormTest3 = () => {
   };
   const myFavoriteFoods = [
     { id: 0, name: '利用していないため' },
-    { id: 1, name: '利用していないため' },
-    { id: 2, name: '利用していないため' },
-    { id: 3, name: '利用していないため' },
+    { id: 1, name: 'もうやめたい' },
+    { id: 2, name: 'そういう気分だったから' },
+    { id: 3, name: 'ほかのサービスに浮気します' },
   ];
   const {
     register,
@@ -18,7 +18,7 @@ export const HookFormTest3 = () => {
   } = useForm<QuestionType>({
     mode: 'onChange',
     defaultValues: {
-      items: ['0', '1', '2'],
+      items: [],
     },
   });
   const onSubmit: SubmitHandler<QuestionType> = (data: QuestionType) => {
@@ -29,16 +29,19 @@ export const HookFormTest3 = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <div className="flex flex-col">
+      <form onSubmit={handleSubmit(onSubmit)} className="inline-flex w-96 flex-col gap-5">
+        <div className="flex flex-col">
+          <div className="flex flex-col ">
             {myFavoriteFoods.map((item) => {
               return (
-                <label key={item.id} className="flex flex-row items-center gap-4">
+                <label
+                  key={item.id}
+                  className="flex flex-row items-center gap-2 hover:cursor-pointer"
+                >
                   <input
                     type="checkbox"
                     value={item.id}
-                    className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 ring-offset-1 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600"
+                    className="inline-flex h-5 w-5"
                     {...register('items', {
                       validate: {
                         atLeastOneRequired: (value) =>
@@ -46,18 +49,25 @@ export const HookFormTest3 = () => {
                       },
                     })}
                   />
-                  <span>{item.name}</span>
+                  <span className="text-xl">{item.name}</span>
                 </label>
               );
             })}
           </div>
           {errors.items && (
-            <p>
+            <p className="text-red-400">
               {errors.items.type}: {errors.items.message}
             </p>
           )}
         </div>
-        <button type="submit" disabled={!isValid || isSubmitting}>
+        <button
+          type="submit"
+          disabled={!isValid || isSubmitting}
+          className={
+            'inline-flex items-center justify-center rounded-lg border py-5 text-xl font-bold ' +
+            (isValid && !isSubmitting ? ' bg-blue-400 text-black' : ' bg-gray-300 text-white')
+          }
+        >
           確定
         </button>
         <p>送信するデータ: {JSON.stringify(watchAllFields)}</p>
